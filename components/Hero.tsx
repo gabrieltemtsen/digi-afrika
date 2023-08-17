@@ -46,7 +46,7 @@ const Hero = () => {
             <button className="btn" onClick={() => window.createAd.showModal()}>
               Create product
             </button>
-            <dialog id="createAd" className="modal ">
+            <dialog  id="createAd" className="modal ">
             <Toaster />
               <form method="dialog" className="modal-box ">
                 <h1>Create Ads</h1>
