@@ -14,7 +14,7 @@ import axios from 'axios';
       color: 'Black',
     },
     {
-      id: 1,
+      id: 2,
       name: 'Basic Tee',
       href: '#',
       imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
@@ -22,7 +22,7 @@ import axios from 'axios';
       price: '35',
       color: 'Black',
     },{
-      id: 1,
+      id: 3,
       name: 'Basic Tee',
       href: '#',
       imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
@@ -71,6 +71,7 @@ const Products = () => {
               </div>
               <div className="mt-4 flex justify-between">
                 <div>
+
                   <h3 className="text-sm ">
                     <a href={product.href}>
                       <span aria-hidden="true" className="absolute inset-0" />
