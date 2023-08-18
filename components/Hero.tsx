@@ -1,26 +1,82 @@
 import styles from "../styles/Home.module.css";
 import toast, { Toaster } from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { Dialog, Transition } from '@headlessui/react'
+import { Fragment, useEffect, useState } from 'react'
+import { getJSONFromCID, getJSONFromFileinCID, pushImgToStorage, putFileandGetHash, putJSONandGetHash } from "../utils/ipfsGateway";
+import { useAccount } from "wagmi";
 
+
+type Product = {
+  productName: string;
+  prdouctPrice: string;
+  owner: any;
+  productImage: string;
+  productFile: string;
+  productDescription: string;
+  productCategory: string;
+
+
+}
 const Hero = () => {
+  let [isOpen, setIsOpen] = useState(false)
+  const { address } = useAccount()
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("")
   const [productImage, setProductImage] = useState<File | null>(null);
+  const [digitalProduct, setDigitalProduct] = useState<File | null>(null);
+
   const [coverImageUrl, setCoverImageUrl] = useState("");
   const [inTxn, setInTxn] = useState(false);
 
-  const handleProductIImage = (e: any) => {
+  const handleProductImage = (e: any) => {
     setProductImage(e.target.files[0]);
     toast.success("Successfully added Image!");
     setCoverImageUrl(URL.createObjectURL(e.target.files[0]));
   };
 
+  const handleDigitalProduct = (e: any) => {
+    setDigitalProduct(e.target.files[0]);
+    toast.success("Successfully added Product!");
+  };
+
+
   const createProduct = async() => {
-    toast.success('creaed')
+
+    if(productImage && productName && price && description && category) {
+
+    const productImgCID = await pushImgToStorage(productImage);
+    const digitalProductCID = await putFileandGetHash(digitalProduct);
+
+    const prodObj: Product = {
+      productName: productName,
+      prdouctPrice: price,
+      owner: address,
+      productImage: productImgCID,
+      productFile: digitalProductCID,
+      productDescription: description,
+      productCategory: category,
+    }
+
+    const productCID = await putJSONandGetHash(prodObj)
+
+    const pro = await getJSONFromCID('bafkreibecruzcikaz6pg2dwgjrutppxkijp5j7awb2cfbssbg24czrcbua')
+
+    console.log(pro)
+
+    } else {
+      toast.error('Please complete the form and try again')
+    }
+
+  }
+  function closeModal() {
+    setIsOpen(false)
   }
 
+  function openModal() {
+    setIsOpen(true)
+  }
   return (
     <>
       
@@ -36,18 +92,48 @@ const Hero = () => {
         <div className="hero-content text-center text-neutral-content">
           <div className="max-w-md">
             <h1 className="mb-5 text-5xl font-bold">
-              Buy and Sell Digital Services
+              Buy and Sell Digital Products
             </h1>
             <p className="mb-5">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
+              Buy and sell digital Products on digi-Afrika, one of africas best decentralised e-commerce platform open around the globe
             </p>
-            <button className="btn" onClick={() => window.createAd.showModal()}>
+            <button className="btn" onClick={openModal}>
               Create product
             </button>
-            <dialog  id="createAd" className="modal ">
-            <Toaster />
+
+            <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Create a Product Ad
+                  </Dialog.Title>
+                  <Toaster />
               <form method="dialog" className="modal-box ">
                 <h1>Create Ads</h1>
                 <div className="form-control w-full max-w-xs ">
@@ -106,7 +192,17 @@ const Hero = () => {
                     <span className="label-text">Product Image</span>
                   </label>
                   <input
-                  onChange={handleProductIImage}
+                  onChange={handleProductImage}
+                    type="file"
+                    className="file-input file-input-bordered w-full max-w-xs"
+                  />
+                </div>
+                <div className="form-control w-full max-w-xs ">
+                  <label className="label">
+                    <span className="label-text">Digital Product</span>
+                  </label>
+                  <input
+                  onChange={handleDigitalProduct}
                     type="file"
                     className="file-input file-input-bordered w-full max-w-xs"
                   />
@@ -114,10 +210,21 @@ const Hero = () => {
                 <span onClick={createProduct} className="mt-2  btn btn-success btn-wide">Create</span>
                 <div className="modal-action">
                   {/* if there is a button in form, it will close the modal */}
-                  <button className="btn">Close</button>
+                  <button onClick={closeModal} className="btn">Close</button>
                 </div>
               </form>
-            </dialog>
+              
+
+           
+
+
+              
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
           </div>
         </div>
       </div>

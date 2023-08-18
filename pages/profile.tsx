@@ -2,20 +2,56 @@
 /* eslint-disable @next/next/no-img-element */
 import { Footer, Navbar } from "../components"
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { WorkerRequest } from "../utils/types"
-import { useAccount, useSignMessage } from "wagmi"
+import { useAccount, useEnsAddress, useEnsAvatar, useEnsName, useSignMessage } from "wagmi"
 import axios from "axios"
 import { useDebounce } from "../hooks/useDebounce"
 import { useFetch } from "../hooks/useFetch"
 import Link from "next/link"
-const Profile = () => {
+import { ethers, providers } from "ethers"
+import { getDefaultProvider } from 'ethers'
+import { fetchEnsAvatar } from "@wagmi/core"
 
+
+
+const Profile = () => {
+  
+  
   const { address } = useAccount()
 
-  let [isOpen, setIsOpen] = useState(false)
+
+
+  const provider = getDefaultProvider() 
+   let [isOpen, setIsOpen] = useState(false)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+    const [ensName, setEnsName] = useState<any>('')
+    const [currentAddr, setCurrentAddr] = useState<any>('')
+    const [ensAvatar, setEnsAvatar] = useState<any>('')
+
+ const { data: ens } = useEnsName({
+ address: address,
+ })
+ console.log('ens:',ens)
+
+ const getAvatar = async() => {
+
+  if(ensName) {
+    const ensAvatar = await fetchEnsAvatar({
+      name: ensName,
+    })
+    setEnsAvatar(ensAvatar)
+    console.log(ensAvatar)
+  }
+  
+
+  
+ }
+ getAvatar()
+
+ const { data: addr } = useEnsAddress({ name: 'temtsen.offchaindemo.eth' })
+ console.log('gabe', addr)
 
 
   const regex = new RegExp('^[a-z0-9-]+$')
@@ -107,6 +143,17 @@ const Profile = () => {
     }
   
   }
+  // const getEnsByResolving = async() => {
+  //   const naming = await provider.lookupAddress(address);
+  //   console.log(naming)
+  //   setEnsName(naming);
+
+  // }
+  useEffect(() => {
+    setCurrentAddr(address)
+    setEnsName(ens)
+    
+  }, )
 
     return(
         <>
@@ -123,12 +170,12 @@ const Profile = () => {
                 <h2 className="text-lg font-semibold mb-4">Profile</h2>
                 <div className="avatar flex justify-center items-center">
   <div className=" mb-3 items-center w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-   <img src="https://www.hollywoodreporter.com/wp-content/uploads/2022/03/iger.jpg?w=1296" />
+   <img src={ensAvatar ||'https://www.hollywoodreporter.com/wp-content/uploads/2022/03/iger.jpg?w=1296' } />
   </div>
   
 </div>
 <div className="avatar flex justify-center items-center mb-5">
-    <h1 className="font-bold">Resolved ENS name</h1>
+    <h1 className="font-bold">{ens || currentAddr}</h1>
   </div>
                  <div className="bg-gray-300 min-h-screen">
       {/* Main Content */}
@@ -148,7 +195,7 @@ const Profile = () => {
             <button
           type="button"
           onClick={openModal}
-          className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          className="rounded-md bg-blue-400 bg-opacity-2 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-7"
         >
           Register ENS name 
         </button>              
@@ -215,7 +262,7 @@ const Profile = () => {
                   <form method="dialog" onSubmit={(e) => {
             e.preventDefault()
             signMessage({
-              message: `Register ${debouncedName}.offchaindemo.eth`,
+              message: `Register ${debouncedName}.digi-afrikan.eth`,
             })
           }} className="modal-box ">
                 <h1>Create Ads</h1>
@@ -246,7 +293,7 @@ const Profile = () => {
               
                 <button type="submit" className="mt-2  btn btn-success btn-wide">Register</button>
                 <div className="modal-action">
-                  <button onClick={closeModal}className="btn">Close</button>
+                  <span onClick={closeModal}className="btn">Close</span>
                 </div>
                 {gatewayError ? (
           <div>
@@ -258,7 +305,7 @@ const Profile = () => {
           <div>
             <p>
               Visit the{' '}
-              <Link href={`https://ens.app/${debouncedName}.digi-afrikan.eth`}>
+              <Link className="text-blue-400" href={`https://ens.app/${debouncedName}.digi-afrikan.eth`}>
                 ENS Manager
               </Link>{' '}
               to see your name
