@@ -2,6 +2,7 @@
 import styles from "../styles/Home.module.css";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Link from "next/link";
 
   const products = [
     {
@@ -30,7 +31,7 @@ import axios from 'axios';
       price: '35',
       color: 'Black',
     },{
-      id: 1,
+      id: 4,
       name: 'Basic Tee',
       href: '#',
       imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
@@ -38,7 +39,7 @@ import axios from 'axios';
       price: '35',
       color: 'Black',
     },{
-      id: 1,
+      id: 5,
       name: 'Basic Tee',
       href: '#',
       imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
@@ -73,10 +74,16 @@ const Products = () => {
                 <div>
 
                   <h3 className="text-sm ">
-                    <a href={product.href}>
+                    <Link href={{
+                        query: {
+                          id: product.id,
+                          // campaignId: campaign.campaignID,
+                        },
+                        pathname: `/product/${product.id}`,
+                      }}>
                       <span aria-hidden="true" className="absolute inset-0" />
                       {product.name}
-                    </a>
+                    </Link>
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">{product.color}</p>
                 </div>
