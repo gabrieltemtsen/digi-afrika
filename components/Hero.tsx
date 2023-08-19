@@ -4,6 +4,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { getJSONFromCID, getJSONFromFileinCID, pushImgToStorage, putFileandGetHash, putJSONandGetHash } from "../utils/ipfsGateway";
 import { useAccount } from "wagmi";
+import { ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS } from "../utils/contracts";
+import { writeContract } from "@wagmi/core";
 
 
 type Product = {
@@ -14,8 +16,6 @@ type Product = {
   productFile: string;
   productDescription: string;
   productCategory: string;
-
-
 }
 const Hero = () => {
   let [isOpen, setIsOpen] = useState(false)
@@ -29,6 +29,13 @@ const Hero = () => {
 
   const [coverImageUrl, setCoverImageUrl] = useState("");
   const [inTxn, setInTxn] = useState(false);
+  function closeModal() {
+    setIsOpen(false)
+  }
+
+  function openModal() {
+    setIsOpen(true)
+  }
 
   const handleProductImage = (e: any) => {
     setProductImage(e.target.files[0]);
@@ -46,6 +53,8 @@ const Hero = () => {
 
     if(productImage && productName && price && description && category) {
 
+      setInTxn(true)
+
     const productImgCID = await pushImgToStorage(productImage);
     const digitalProductCID = await putFileandGetHash(digitalProduct);
 
@@ -61,25 +70,40 @@ const Hero = () => {
 
     const productCID = await putJSONandGetHash(prodObj)
 
-    const pro = await getJSONFromCID('bafkreibecruzcikaz6pg2dwgjrutppxkijp5j7awb2cfbssbg24czrcbua')
 
-    console.log(pro)
+    const { hash } = await writeContract({
+      address: ECOMMERCE_CONTRACT_ADDRESS,
+      abi: ECOMMERCE_ABI,
+      functionName: "createProduct",
+      args: [productCID, price],
+    });
+
+    if(hash) {
+
+      toast.success('Successfully created Product')
+
+      setInTxn(false)
+      closeModal()
+  
+
+    }
+    else{
+      setInTxn(false)
+    }
+
+   
+
+    
 
     } else {
       toast.error('Please complete the form and try again')
+      setInTxn(false)
     }
 
   }
-  function closeModal() {
-    setIsOpen(false)
-  }
-
-  function openModal() {
-    setIsOpen(true)
-  }
+ 
   return (
     <>
-      
 
       <div
         className="hero min-h-screen  "
@@ -207,7 +231,9 @@ const Hero = () => {
                     className="file-input file-input-bordered w-full max-w-xs"
                   />
                 </div>
-                <span onClick={createProduct} className="mt-2  btn btn-success btn-wide">Create</span>
+                <span onClick={createProduct} className="mt-2  btn btn-success btn-wide"> {inTxn ?
+                 (  <span className="loading loading-infinity loading-lg">loading</span>): ('Create')} </span>
+
                 <div className="modal-action">
                   {/* if there is a button in form, it will close the modal */}
                   <button onClick={closeModal} className="btn">Close</button>
