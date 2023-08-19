@@ -32,6 +32,7 @@ const Profile = () => {
 
  const { data: ens } = useEnsName({
  address: address,
+ chainId: 5,
  })
  console.log('ens:',ens)
 
@@ -50,8 +51,7 @@ const Profile = () => {
  }
  getAvatar()
 
- const { data: addr } = useEnsAddress({ name: 'temtsen.offchaindemo.eth' })
- console.log('gabe', addr)
+ 
 
 
   const regex = new RegExp('^[a-z0-9-]+$')
@@ -153,7 +153,7 @@ const Profile = () => {
     setCurrentAddr(address)
     setEnsName(ens)
     
-  }, )
+  }, [address, ens], )
 
     return(
         <>
@@ -175,7 +175,11 @@ const Profile = () => {
   
 </div>
 <div className="avatar flex justify-center items-center mb-5">
-    <h1 className="font-bold">{ens || currentAddr}</h1>
+    <h1 className="font-bold">{address ? (
+       ens
+      ) : (
+       address
+      )}</h1>
   </div>
                  <div className="bg-gray-300 min-h-screen">
       {/* Main Content */}
@@ -239,7 +243,7 @@ const Profile = () => {
             leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
+          </Transition.Child>setId();
 
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
