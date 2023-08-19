@@ -2,8 +2,7 @@
 import { useEffect, useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { Footer, Navbar } from '../../components'
-import router from 'next/router'
-
+import { useRouter } from "next/router";
 const product = {
   name: 'Basic Tee 6-Pack',
   price: '$192',
@@ -50,6 +49,7 @@ const reviews = { href: '#', average: 4, totalCount: 117 }
 export default function ProductView() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+  const router = useRouter();
 
   const [currentId, setCurrentId] = useState<any>();
 
