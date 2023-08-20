@@ -7,15 +7,14 @@ import { Footer, Hero, Navbar, Products } from "../components";
 const Home: NextPage = () => {
   return (
     <>
-    <div className="">
-      <Navbar />
-      <main className={styles.main}>
-        <Hero />
-        <Products />
-      </main>
-      <Footer />
+      <div className="">
+        <Navbar />
+        <main className={styles.main}>
+          <Hero />
+          <Products />
+        </main>
+        <Footer />
       </div>
-      
     </>
   );
 };
