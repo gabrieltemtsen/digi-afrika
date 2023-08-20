@@ -6,10 +6,11 @@ import Link from "next/link";
 import { readContract } from "@wagmi/core";
 import { ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS } from "../utils/contracts";
 import { shortenAddress } from "../utils/shortenAddress";
+import { shortenString } from "../utils/shortenString";
 type Product = {
   productId: any;
   productName: string;
-  prdouctPrice: string;
+  productPrice: string;
   owner: any;
   productImage: string;
   productFile: string;
@@ -41,6 +42,7 @@ const Products = () => {
         const productCID = products[i].cid;
         const productId = products[i].id;
         const productStats = products[i].sold;
+        const productOwner = products[i].seller
 
         if (productCID) {
           let config: any = {
@@ -52,12 +54,10 @@ const Products = () => {
 
           const productDataObj: Product = axiosResponse.data;
 
-         
-
           const ProductObj = {
             productId: Number(productId),
-            owner: productDataObj.owner,
-            productPrice: productDataObj.prdouctPrice,
+            owner: productOwner,
+            productPrice: productDataObj.productPrice,
             productName: productDataObj.productName,
             productDescription: productDataObj.productDescription,
             productImage: productDataObj.productImage,
@@ -110,7 +110,7 @@ const Products = () => {
                       {product.productName}
                     </Link>
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">{product.productDescription}</p>
+                  <p className="mt-1 text-sm text-gray-500">{shortenString(product.productDescription)}</p>
                   <p className="mt-1 text-sm ">By: {shortenAddress(product.owner)}</p>
 
                 </div>
