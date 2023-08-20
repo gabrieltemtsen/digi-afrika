@@ -11,14 +11,14 @@ import { useFetch } from "../hooks/useFetch"
 import Link from "next/link"
 import { ethers, providers } from "ethers"
 import { getDefaultProvider } from 'ethers'
-import { fetchEnsAvatar, readContract } from "@wagmi/core"
+import { fetchEnsAvatar, readContract, writeContract } from "@wagmi/core"
 import { ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS } from "../utils/contracts"
+import toast, { Toaster } from "react-hot-toast"
 
 type Product = {
   productId: any;
   productName: string;
-  prdouctPrice: string;
-  owner: any;
+  productPrice: string;
   productImage: string;
   productFile: string;
   productDescription: string;
@@ -41,6 +41,9 @@ const Profile = () => {
     const [currentAddr, setCurrentAddr] = useState<any>('')
     const [ensAvatar, setEnsAvatar] = useState<any>('')
     const [allProducts, setAllProducts] = useState<any[]>([]);
+    const [inTxn, setInTxn] = useState(false)
+
+    const [digiPoints, setDigiPoints] = useState<any>()
 
  const { data: ens } = useEnsName({
  address: address,
@@ -169,9 +172,23 @@ const Profile = () => {
       const products: any = await readContract({
         address: ECOMMERCE_CONTRACT_ADDRESS,
         abi: ECOMMERCE_ABI,
-        functionName: "getProductsByAddress",
+        functionName: "getProductsByOwnerAddress",
         args: [address]
       });
+
+      const digiPoints: any = await readContract({
+        address: ECOMMERCE_CONTRACT_ADDRESS,
+        abi: ECOMMERCE_ABI,
+        functionName: "getUserPoints",
+        args: [address]
+      });
+
+      setDigiPoints(Number(digiPoints))
+
+
+
+
+
 
       // console.log(products)
 
@@ -181,6 +198,7 @@ const Profile = () => {
         const productCID = products[i].cid;
         const productId = products[i].id;
         const productStats = products[i].sold;
+        const productOwner = products[i].seller;
 
         if (productCID) {
           let config: any = {
@@ -196,8 +214,8 @@ const Profile = () => {
 
           const ProductObj = {
             productId: Number(productId),
-            owner: productDataObj.owner,
-            productPrice: productDataObj.prdouctPrice,
+            owner: productOwner,
+            productPrice: productDataObj.productPrice,
             productName: productDataObj.productName,
             productDescription: productDataObj.productDescription,
             productImage: productDataObj.productImage,
@@ -214,6 +232,27 @@ const Profile = () => {
     }
   };
 
+  const  deleteProduct = async (id: any) => {
+    try {
+      setInTxn(true)
+      const { hash } = await writeContract({
+        address: ECOMMERCE_CONTRACT_ADDRESS,
+        abi: ECOMMERCE_ABI,
+        functionName: "removeProduct",
+        args: [id],
+      });
+
+      toast.success('successfully deleted product')
+      setInTxn(false)
+
+      
+    } catch (error) {
+
+      setInTxn(false)
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     setCurrentAddr(address)
     setEnsName(ens)
@@ -224,6 +263,7 @@ const Profile = () => {
 
     return(
         <>
+        <Toaster />
          <Navbar />
         <div className=" min-h-screen">
         
@@ -255,8 +295,10 @@ const Profile = () => {
           {/* Chat Section */}
           <div className="w-2/3 p-4">
             <div className="bg-white rounded-lg shadow-md p-4">
-              <h2 className="text-lg font-semibold text-black mb-4">Your Points: 190 digiPoint(s) </h2>
+              <h2 className="text-lg font-semibold text-black mb-4">Your Points: {digiPoints} digiPoint(s) </h2>
               <button className="btn btn-sm">redeem points</button>
+              <p className="text-black mt-1 text-sm italic" >get points by making purchases on digi-afrika</p>
+
             </div>
           </div>
 
@@ -316,20 +358,21 @@ const Profile = () => {
         </td>
         <td>{product.productPrice}</td>
         <th>
+           <button className="btn  btn-sm">
         <Link href={{
                         query: {
                           id: product.productId,
-                          // campaignId: campaign.campaignID,
                         },
                         pathname: `/product/${product.productId}`,
                       }}>
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      <button className="btn  btn-xs">view</button>
+                      View
                     </Link>
+                    </button>
          
         </th>
         <th>
-          <button className="btn btn-xs bg-red-900">delete</button>
+          <button onClick={(e)=>{deleteProduct(product.productId)}} className="btn btn-sm bg-red-900">{inTxn ?
+                 (  <span className="loading loading-infinity  loading-lg">loading</span>): ('delete')}</button>
         </th>
       </tr>
         </>
@@ -340,12 +383,13 @@ const Profile = () => {
      
     </tbody>
     {/* foot */}
-    <tfoot>
+    <tfoot className="text-black">
       <tr>
+        
+      <th>Product</th>
+        <th>Description</th>
+        <th>Price</th>
         <th></th>
-        <th>Name</th>
-        <th>Job</th>
-        <th>Favorite Color</th>
         <th></th>
       </tr>
     </tfoot>

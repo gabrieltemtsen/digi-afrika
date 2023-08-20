@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@celo/rainbowkit-celo": "^1.0.2",
     "@headlessui/react": "^1.7.17",
     "@rainbow-me/rainbowkit": "^1.0.8",
     "@tailwindcss/aspect-ratio": "^0.4.2",

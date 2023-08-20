@@ -6,12 +6,12 @@ import { getJSONFromCID, getJSONFromFileinCID, pushImgToStorage, putFileandGetHa
 import { useAccount } from "wagmi";
 import { ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS } from "../utils/contracts";
 import { writeContract } from "@wagmi/core";
+import { parseEther } from "viem";
 
 
 type Product = {
   productName: string;
-  prdouctPrice: string;
-  owner: any;
+  productPrice: string;
   productImage: string;
   productFile: string;
   productDescription: string;
@@ -51,54 +51,65 @@ const Hero = () => {
 
   const createProduct = async() => {
 
-    if(productImage && productName && price && description && category) {
+    try {
+      if(productImage && productName && price && description && category) {
 
-      setInTxn(true)
-
-    const productImgCID = await pushImgToStorage(productImage);
-    const digitalProductCID = await putFileandGetHash(digitalProduct);
-
-    const prodObj: Product = {
-      productName: productName,
-      prdouctPrice: price,
-      owner: address,
-      productImage: productImgCID,
-      productFile: digitalProductCID,
-      productDescription: description,
-      productCategory: category,
-    }
-
-    const productCID = await putJSONandGetHash(prodObj)
-
-
-    const { hash } = await writeContract({
-      address: ECOMMERCE_CONTRACT_ADDRESS,
-      abi: ECOMMERCE_ABI,
-      functionName: "createProduct",
-      args: [productCID, price],
-    });
-
-    if(hash) {
-
-      toast.success('Successfully created Product')
-
-      setInTxn(false)
-      closeModal()
+        setInTxn(true)
   
+      const productImgCID = await pushImgToStorage(productImage);
+      const digitalProductCID = await putFileandGetHash(digitalProduct);
+  
+      const prodObj: Product = {
+        productName: productName,
+        productPrice: price,
+        productImage: productImgCID,
+        productFile: digitalProductCID,
+        productDescription: description,
+        productCategory: category,
+      }
+  
+      const productCID = await putJSONandGetHash(prodObj)
 
-    }
-    else{
-      setInTxn(false)
+      const parsedPrice = parseEther(price)
+  
+  
+      const { hash } = await writeContract({
+        address: ECOMMERCE_CONTRACT_ADDRESS,
+        abi: ECOMMERCE_ABI,
+        functionName: "createProduct",
+        args: [productCID, parsedPrice],
+      });
+  
+      if(hash) {
+  
+        toast.success('Successfully created Product')
+  
+        setInTxn(false)
+        closeModal()
+    
+  
+      }
+      else{
+        setInTxn(false)
+      }
+  
+     
+  
+      
+  
+      } else {
+        toast.error('Please complete the form and try again')
+        setInTxn(false)
+      }
+      
+    } catch (error) {
+      console.log(error)
+      toast.error('something went wrong')
+        setInTxn(false)
+      
     }
 
    
-
-    
-
-    } else {
-      toast.error('Please complete the form and try again')
-      setInTxn(false)
-    }
 
   }
  
@@ -209,7 +220,10 @@ const Hero = () => {
                     <option disabled selected>
                       Select
                     </option>
-                    <option>Star Wars</option>
+                    <option>Music</option>
+                    <option>Books</option>
+                    <option>Design</option>
+                    <option>Art works</option>
                   </select>
                 </div>
                 <div className="form-control w-full max-w-xs ">
