@@ -3,15 +3,12 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import type { AppProps } from "next/app";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import {
-  goerli,
-  celoAlfajores
-} from "wagmi/chains";
+import { goerli, celoAlfajores } from "wagmi/chains";
 import { Alfajores, Celo } from "@celo/rainbowkit-celo/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [ 
+  [
     goerli,
     Alfajores,
     Celo,

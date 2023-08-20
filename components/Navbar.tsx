@@ -16,7 +16,9 @@ const Navbar = () => {
       </Head>
       <div className="mb-1 mt-2 p-5 navbar bg-base-100">
         <div className="flex-1">
-          <Link href="/" className="btn btn-ghost normal-case text-xl">Digi-Afrika</Link>
+          <Link href="/" className="btn btn-ghost normal-case text-xl">
+            Digi-Afrika
+          </Link>
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
