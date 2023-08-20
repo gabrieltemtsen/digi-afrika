@@ -252,6 +252,35 @@ const Profile = () => {
       console.log(error)
     }
   }
+  const  redeemPoints = async (id: any) => {
+    try {
+      setInTxn(true)
+
+      if(digiPoints < 500 ) {
+
+        toast.error('Sorry You need atleast 500 points to redeem ')
+
+      } else {
+        const { hash } = await writeContract({
+          address: ECOMMERCE_CONTRACT_ADDRESS,
+          abi: ECOMMERCE_ABI,
+          functionName: "redeemUserPoints",
+          args: [address],
+        });
+  
+        toast.success('successfully redeemed points')
+        setInTxn(false)
+
+      }
+     
+
+      
+    } catch (error) {
+
+      setInTxn(false)
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     setCurrentAddr(address)
@@ -296,7 +325,7 @@ const Profile = () => {
           <div className="w-2/3 p-4">
             <div className="bg-white rounded-lg shadow-md p-4">
               <h2 className="text-lg font-semibold text-black mb-4">Your Points: {digiPoints} digiPoint(s) </h2>
-              <button className="btn btn-sm">redeem points</button>
+              <button onClick={redeemPoints} className="btn btn-sm">redeem points</button>
               <p className="text-black mt-1 text-sm italic" >get points by making purchases on digi-afrika</p>
 
             </div>
