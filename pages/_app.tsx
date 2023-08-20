@@ -7,12 +7,14 @@ import {
   goerli,
   celoAlfajores
 } from "wagmi/chains";
+import { Alfajores, Celo } from "@celo/rainbowkit-celo/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [ 
     goerli,
-    celoAlfajores,
+    Alfajores,
+    Celo,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
   ],
   [publicProvider()],

@@ -209,7 +209,10 @@ const Hero = () => {
                     <option disabled selected>
                       Select
                     </option>
-                    <option>Star Wars</option>
+                    <option>Music</option>
+                    <option>Books</option>
+                    <option>Design</option>
+                    <option>Art works</option>
                   </select>
                 </div>
                 <div className="form-control w-full max-w-xs ">

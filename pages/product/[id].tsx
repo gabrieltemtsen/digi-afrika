@@ -3,9 +3,13 @@ import { useEffect, useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { Footer, Navbar } from '../../components'
 import { useRouter } from "next/router";
+import { parseEther, parseGwei } from 'viem';
+import toast, { Toaster } from 'react-hot-toast';
+import { writeContract } from '@wagmi/core';
+import { ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS } from '../../utils/contracts';
 const product = {
   name: 'Basic Tee 6-Pack',
-  price: '192',
+  price: '1',
   images: [
     {
       src: 'https://images.pexels.com/photos/2386687/pexels-photo-2386687.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -25,8 +29,38 @@ export default function ProductView() {
   const router = useRouter();
 
   const [currentId, setCurrentId] = useState<any>();
+  const [prpoduct, setProduct] = useState<any>({});
+
+  const [isSold, setIsSold] = useState(false);
+  const [inTxn, setInTxn] = useState(false)
+  const [isOwner, setIsOwner] = useState(false)
+
 
   const id = router.query.id
+
+
+  const buyProduct = async () => {
+    try {
+       const price = product.price as `${number}`;
+      const _price = parseEther(price);
+      setInTxn(true);
+
+      const { hash } = await writeContract({
+        address: ECOMMERCE_CONTRACT_ADDRESS,
+        abi: ECOMMERCE_ABI,
+        functionName: "buyProduct",
+        args: [id],
+        value: parseEther(product.price),
+      });
+
+      toast.success("Purchase Successfull");
+      setInTxn(false);
+
+    }  catch (error) {
+      setInTxn(false)
+      
+    }
+  }
 
 
 
@@ -36,6 +70,7 @@ export default function ProductView() {
 
   return (
     <>
+    <Toaster />
     <Navbar />
       <div className="container mx-auto py-8">
       <div className="pt-6 bg-blue-950 rounded-lg shadow-md p-4">
@@ -70,7 +105,16 @@ export default function ProductView() {
             <h2 className="sr-only">Product information</h2>
             <p className="text-3xl tracking-tight text-gray-900">{product.price} celo {currentId}</p>
 
-            <button className='mt-2 btn btn-wide'>Purchase</button>
+            {isSold ? (<span className='mt-3 badge badge-lg bg-green-700'>Item bought</span>) : (<button onClick={buyProduct} className='mt-2 btn btn-wide '>{inTxn ?
+                 (  <span className="loading loading-infinity loading-lg">loading</span>): ('Purchase')}</button>)}
+
+            <div className='mt-3'>
+            {isSold ? (<button className='mt-2 btn btn-wide '>File dispute</button>) : ('')}
+
+
+            </div>
+            
+
 
           </div>
 
