@@ -11,9 +11,20 @@ import { useFetch } from "../hooks/useFetch"
 import Link from "next/link"
 import { ethers, providers } from "ethers"
 import { getDefaultProvider } from 'ethers'
-import { fetchEnsAvatar } from "@wagmi/core"
+import { fetchEnsAvatar, readContract } from "@wagmi/core"
+import { ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS } from "../utils/contracts"
 
-
+type Product = {
+  productId: any;
+  productName: string;
+  prdouctPrice: string;
+  owner: any;
+  productImage: string;
+  productFile: string;
+  productDescription: string;
+  productCategory: string;
+  sold: boolean;
+}
 
 const Profile = () => {
   
@@ -29,6 +40,7 @@ const Profile = () => {
     const [ensName, setEnsName] = useState<any>('')
     const [currentAddr, setCurrentAddr] = useState<any>('')
     const [ensAvatar, setEnsAvatar] = useState<any>('')
+    const [allProducts, setAllProducts] = useState<any[]>([]);
 
  const { data: ens } = useEnsName({
  address: address,
@@ -149,9 +161,64 @@ const Profile = () => {
   //   setEnsName(naming);
 
   // }
+
+  const getProductsByAddress = async () => {
+    try {
+      
+
+      const products: any = await readContract({
+        address: ECOMMERCE_CONTRACT_ADDRESS,
+        abi: ECOMMERCE_ABI,
+        functionName: "getProductsByAddress",
+        args: [address]
+      });
+
+      // console.log(products)
+
+      let newProduct = [];
+
+      for (let i = 0; i < products.length; i++) {
+        const productCID = products[i].cid;
+        const productId = products[i].id;
+        const productStats = products[i].sold;
+
+        if (productCID) {
+          let config: any = {
+            method: "get",
+            url: `https://${productCID}.ipfs.w3s.link/file.json`,
+            headers: {},
+          };
+          const axiosResponse = await axios(config);
+
+          const productDataObj: Product = axiosResponse.data;
+
+         
+
+          const ProductObj = {
+            productId: Number(productId),
+            owner: productDataObj.owner,
+            productPrice: productDataObj.prdouctPrice,
+            productName: productDataObj.productName,
+            productDescription: productDataObj.productDescription,
+            productImage: productDataObj.productImage,
+            sold: productStats,
+          };
+
+          newProduct.push(ProductObj);
+        }
+      }
+
+      setAllProducts(newProduct);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     setCurrentAddr(address)
     setEnsName(ens)
+    getProductsByAddress()
+    
     
   }, [address, ens], )
 
@@ -189,7 +256,7 @@ const Profile = () => {
           <div className="w-2/3 p-4">
             <div className="bg-white rounded-lg shadow-md p-4">
               <h2 className="text-lg font-semibold text-black mb-4">Your Points: 190 digiPoint(s) </h2>
-              {/* Chat content */}
+              <button className="btn btn-sm">redeem points</button>
             </div>
           </div>
 
@@ -199,7 +266,7 @@ const Profile = () => {
             <button
           type="button"
           onClick={openModal}
-          className="rounded-md bg-blue-400 bg-opacity-2 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-7"
+          className="rounded-md bg-blue-700 bg-opacity-2 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-7"
         >
           Register ENS name 
         </button>              
@@ -211,6 +278,80 @@ const Profile = () => {
         <div className="mt-8">
           <div className="bg-white rounded-lg shadow-md p-4">
             <h2 className="text-lg font-semibold text-black mb-4">Your Products</h2>
+
+            <div className="overflow-x-auto">
+  <table className="table text-black">
+    {/* head */}
+    <thead className="text-black">
+      <tr>
+       
+        <th>Product</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {/* row 1 */}
+      {allProducts.map( (product) => (
+        <>
+         <tr>
+        
+        <td>
+          <div className="flex items-center space-x-3">
+            <div className="avatar">
+              <div className="mask mask-squircle w-12 h-12">
+                <img src={`https://ipfs.io/ipfs/${product.productImage}`}alt="Product" />
+              </div>
+            </div>
+            <div>
+              <div className="font-bold">{product.productName}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+         { product.productDescription}
+          <br/>
+        </td>
+        <td>{product.productPrice}</td>
+        <th>
+        <Link href={{
+                        query: {
+                          id: product.productId,
+                          // campaignId: campaign.campaignID,
+                        },
+                        pathname: `/product/${product.productId}`,
+                      }}>
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      <button className="btn  btn-xs">view</button>
+                    </Link>
+         
+        </th>
+        <th>
+          <button className="btn btn-xs bg-red-900">delete</button>
+        </th>
+      </tr>
+        </>
+
+       ))}
+     
+     
+     
+    </tbody>
+    {/* foot */}
+    <tfoot>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Job</th>
+        <th>Favorite Color</th>
+        <th></th>
+      </tr>
+    </tfoot>
+    
+  </table>
+</div>
             
           </div>
         </div>
@@ -261,7 +402,7 @@ const Profile = () => {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Register ENS
+                    Register a digi-afrikan ENS name
                   </Dialog.Title>
                   <form method="dialog" onSubmit={(e) => {
             e.preventDefault()

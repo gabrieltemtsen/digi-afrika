@@ -104,6 +104,8 @@ const Hero = () => {
  
   return (
     <>
+                      <Toaster />
+
 
       <div
         className="hero min-h-screen  "
@@ -157,7 +159,6 @@ const Hero = () => {
                   >
                     Create a Product Ad
                   </Dialog.Title>
-                  <Toaster />
               <form method="dialog" className="modal-box ">
                 <h1>Create Ads</h1>
                 <div className="form-control w-full max-w-xs ">
