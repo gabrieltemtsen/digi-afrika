@@ -6,5 +6,5 @@ const nextConfig = {
     return config;
   },
 };
-
+//webpack export
 module.exports = nextConfig;
