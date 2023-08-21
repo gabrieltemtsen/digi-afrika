@@ -8,7 +8,7 @@ https://digi-afrika.vercel.app/
 https://www.loom.com/share/9dc55d26e47240dc825b81f33d090f16
 
 ### Pitch Deck
-''
+https://pitch.com/public/cd3b97f2-a853-44b3-9abf-918d6f77ca4a
 
 
 ## Why Buidl Digi-Afrika
