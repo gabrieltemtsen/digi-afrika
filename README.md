@@ -5,7 +5,7 @@ Digi-Afrika is a decentralized e-commerce platform built on the principles of an
 ### Live Demo
 https://digi-afrika.vercel.app/
 ### Video Demo
-''
+https://www.loom.com/share/9dc55d26e47240dc825b81f33d090f16
 
 ### Pitch Deck
 ''
@@ -38,6 +38,7 @@ Digi-Afrika was conceived to revolutionize e-commerce by combining decentralizat
 * Fetching Products from the smart contract, looping through to retrieve the data from IPFS and displaying in the UI.
 * Dependency conflicts between ethers, viem, wagmi and rainbowkit due to the packages migrations.
 * Offchain-Ens registration, deploying worker on cloudfare.
+* Deploying e-commerce contract on Bunzz.
 
 ## Future  Plans
 * Implement a fully functional Dispute Management within an escrow framework.
@@ -69,8 +70,8 @@ npm run dev
 
 ```bash
 
-E-commerce Contract Address: 
-''
+E-commerce Contract Address deployed with Bunzz: 
+'0xBd8E57afA96b52c187C367a4a082e584732d6575'
 
 ```
 ## ENS Resolution & Cloudfare D1
