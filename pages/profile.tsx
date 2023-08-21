@@ -229,6 +229,7 @@ const Profile = () => {
 
       if (digiPoints < 500) {
         toast.error("Sorry You need atleast 500 points to redeem ");
+        setInTxn(false);
       } else {
         const { hash } = await writeContract({
           address: ECOMMERCE_CONTRACT_ADDRESS,

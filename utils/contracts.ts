@@ -1,592 +1,592 @@
 export const ECOMMERCE_CONTRACT_ADDRESS =
   "0x1399980B77844322848Fd4ff20D87124b9e8B841";
-export const ECOMMERCE_ABI = [
+export const ECOMMERCE_ABI =  [
   {
-    inputs: [],
-    stateMutability: "nonpayable",
-    type: "constructor",
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
   },
   {
-    inputs: [],
-    name: "BelowMinimumPrice",
-    type: "error",
+    "inputs": [],
+    "name": "BelowMinimumPrice",
+    "type": "error"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "string",
-        name: "errorMessage",
-        type: "string",
-      },
+        "internalType": "string",
+        "name": "errorMessage",
+        "type": "string"
+      }
     ],
-    name: "DisputeError",
-    type: "error",
+    "name": "DisputeError",
+    "type": "error"
   },
   {
-    inputs: [],
-    name: "InSufficientPoints",
-    type: "error",
+    "inputs": [],
+    "name": "InSufficientPoints",
+    "type": "error"
   },
   {
-    inputs: [],
-    name: "InexistentProduct",
-    type: "error",
+    "inputs": [],
+    "name": "InexistentProduct",
+    "type": "error"
   },
   {
-    inputs: [],
-    name: "InsufficientPayment",
-    type: "error",
+    "inputs": [],
+    "name": "InsufficientPayment",
+    "type": "error"
   },
   {
-    inputs: [],
-    name: "ProductAlreadyRemoved",
-    type: "error",
+    "inputs": [],
+    "name": "ProductAlreadyRemoved",
+    "type": "error"
   },
   {
-    inputs: [],
-    name: "ProductAlreadySold",
-    type: "error",
+    "inputs": [],
+    "name": "ProductAlreadySold",
+    "type": "error"
   },
   {
-    inputs: [],
-    name: "UnauthorizedCaller",
-    type: "error",
+    "inputs": [],
+    "name": "UnauthorizedCaller",
+    "type": "error"
   },
   {
-    inputs: [],
-    name: "UnauthorizedSeller",
-    type: "error",
+    "inputs": [],
+    "name": "UnauthorizedSeller",
+    "type": "error"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: false,
-        internalType: "uint256",
-        name: "productId",
-        type: "uint256",
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "productId",
+        "type": "uint256"
       },
       {
-        indexed: true,
-        internalType: "address",
-        name: "resolver",
-        type: "address",
+        "indexed": true,
+        "internalType": "address",
+        "name": "resolver",
+        "type": "address"
       },
       {
-        indexed: true,
-        internalType: "address",
-        name: "winner",
-        type: "address",
-      },
+        "indexed": true,
+        "internalType": "address",
+        "name": "winner",
+        "type": "address"
+      }
     ],
-    name: "DisputeResolved",
-    type: "event",
+    "name": "DisputeResolved",
+    "type": "event"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: true,
-        internalType: "address",
-        name: "previousOwner",
-        type: "address",
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
       },
       {
-        indexed: true,
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
-    name: "OwnershipTransferred",
-    type: "event",
+    "name": "OwnershipTransferred",
+    "type": "event"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: false,
-        internalType: "uint256",
-        name: "productId",
-        type: "uint256",
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "productId",
+        "type": "uint256"
       },
       {
-        indexed: false,
-        internalType: "address",
-        name: "seller",
-        type: "address",
+        "indexed": false,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
       },
       {
-        indexed: false,
-        internalType: "string",
-        name: "cid",
-        type: "string",
+        "indexed": false,
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
       },
       {
-        indexed: false,
-        internalType: "uint256",
-        name: "price",
-        type: "uint256",
-      },
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      }
     ],
-    name: "ProductCreated",
-    type: "event",
+    "name": "ProductCreated",
+    "type": "event"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: false,
-        internalType: "uint256",
-        name: "productId",
-        type: "uint256",
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "productId",
+        "type": "uint256"
       },
       {
-        indexed: true,
-        internalType: "address",
-        name: "buyer",
-        type: "address",
-      },
+        "indexed": true,
+        "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      }
     ],
-    name: "PurchaseSuccessful",
-    type: "event",
+    "name": "PurchaseSuccessful",
+    "type": "event"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "_productId",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "_productId",
+        "type": "uint256"
+      }
     ],
-    name: "buyProduct",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
+    "name": "buyProduct",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "string",
-        name: "cid",
-        type: "string",
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
       },
       {
-        internalType: "uint256",
-        name: "price",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      }
     ],
-    name: "createProduct",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "createProduct",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [],
-    name: "getAllProducts",
-    outputs: [
+    "inputs": [],
+    "name": "getAllProducts",
+    "outputs": [
       {
-        components: [
+        "components": [
           {
-            internalType: "uint256",
-            name: "id",
-            type: "uint256",
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
           },
           {
-            internalType: "address",
-            name: "seller",
-            type: "address",
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
           },
           {
-            internalType: "string",
-            name: "cid",
-            type: "string",
+            "internalType": "string",
+            "name": "cid",
+            "type": "string"
           },
           {
-            internalType: "uint256",
-            name: "price",
-            type: "uint256",
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
           },
           {
-            internalType: "bool",
-            name: "sold",
-            type: "bool",
-          },
+            "internalType": "bool",
+            "name": "sold",
+            "type": "bool"
+          }
         ],
-        internalType: "struct DecentralizedEcommerce.Product[]",
-        name: "allProducts",
-        type: "tuple[]",
-      },
+        "internalType": "struct DecentralizedEcommerce.Product[]",
+        "name": "allProducts",
+        "type": "tuple[]"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "_productId",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "_productId",
+        "type": "uint256"
+      }
     ],
-    name: "getProductsById",
-    outputs: [
+    "name": "getProductsById",
+    "outputs": [
       {
-        components: [
+        "components": [
           {
-            internalType: "uint256",
-            name: "id",
-            type: "uint256",
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
           },
           {
-            internalType: "address",
-            name: "seller",
-            type: "address",
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
           },
           {
-            internalType: "string",
-            name: "cid",
-            type: "string",
+            "internalType": "string",
+            "name": "cid",
+            "type": "string"
           },
           {
-            internalType: "uint256",
-            name: "price",
-            type: "uint256",
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
           },
           {
-            internalType: "bool",
-            name: "sold",
-            type: "bool",
-          },
+            "internalType": "bool",
+            "name": "sold",
+            "type": "bool"
+          }
         ],
-        internalType: "struct DecentralizedEcommerce.Product",
-        name: "_product",
-        type: "tuple",
-      },
+        "internalType": "struct DecentralizedEcommerce.Product",
+        "name": "_product",
+        "type": "tuple"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address",
-        name: "_owner",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      }
     ],
-    name: "getProductsByOwnerAddress",
-    outputs: [
+    "name": "getProductsByOwnerAddress",
+    "outputs": [
       {
-        components: [
+        "components": [
           {
-            internalType: "uint256",
-            name: "id",
-            type: "uint256",
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
           },
           {
-            internalType: "address",
-            name: "seller",
-            type: "address",
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
           },
           {
-            internalType: "string",
-            name: "cid",
-            type: "string",
+            "internalType": "string",
+            "name": "cid",
+            "type": "string"
           },
           {
-            internalType: "uint256",
-            name: "price",
-            type: "uint256",
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
           },
           {
-            internalType: "bool",
-            name: "sold",
-            type: "bool",
-          },
+            "internalType": "bool",
+            "name": "sold",
+            "type": "bool"
+          }
         ],
-        internalType: "struct DecentralizedEcommerce.Product[]",
-        name: "_products",
-        type: "tuple[]",
-      },
+        "internalType": "struct DecentralizedEcommerce.Product[]",
+        "name": "_products",
+        "type": "tuple[]"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address",
-        name: "_user",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
     ],
-    name: "getUserPoints",
-    outputs: [
+    "name": "getUserPoints",
+    "outputs": [
       {
-        internalType: "uint256",
-        name: "_userPoints",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "_userPoints",
+        "type": "uint256"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    name: "hasBeenRemoved",
-    outputs: [
+    "name": "hasBeenRemoved",
+    "outputs": [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "_productId",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "_productId",
+        "type": "uint256"
+      }
     ],
-    name: "initiateDispute",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "initiateDispute",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [],
-    name: "owner",
-    outputs: [
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    name: "productExists",
-    outputs: [
+    "name": "productExists",
+    "outputs": [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    name: "productIdToOwner",
-    outputs: [
+    "name": "productIdToOwner",
+    "outputs": [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    name: "products",
-    outputs: [
+    "name": "products",
+    "outputs": [
       {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
       },
       {
-        internalType: "address",
-        name: "seller",
-        type: "address",
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
       },
       {
-        internalType: "string",
-        name: "cid",
-        type: "string",
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
       },
       {
-        internalType: "uint256",
-        name: "price",
-        type: "uint256",
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
       },
       {
-        internalType: "bool",
-        name: "sold",
-        type: "bool",
-      },
+        "internalType": "bool",
+        "name": "sold",
+        "type": "bool"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    name: "productsIdToIndex",
-    outputs: [
+    "name": "productsIdToIndex",
+    "outputs": [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    name: "productsIdToProducts",
-    outputs: [
+    "name": "productsIdToProducts",
+    "outputs": [
       {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
       },
       {
-        internalType: "address",
-        name: "seller",
-        type: "address",
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
       },
       {
-        internalType: "string",
-        name: "cid",
-        type: "string",
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
       },
       {
-        internalType: "uint256",
-        name: "price",
-        type: "uint256",
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
       },
       {
-        internalType: "bool",
-        name: "sold",
-        type: "bool",
-      },
+        "internalType": "bool",
+        "name": "sold",
+        "type": "bool"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address payable",
-        name: "user",
-        type: "address",
-      },
+        "internalType": "address payable",
+        "name": "user",
+        "type": "address"
+      }
     ],
-    name: "redeemUserPoints",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "redeemUserPoints",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "uint256",
-        name: "_productId",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "_productId",
+        "type": "uint256"
+      }
     ],
-    name: "removeProduct",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "removeProduct",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [],
-    name: "resolveDispute",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "inputs": [],
+    "name": "resolveDispute",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
     ],
-    name: "userPoints",
-    outputs: [
+    "name": "userPoints",
+    "outputs": [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    stateMutability: "payable",
-    type: "receive",
-  },
+    "stateMutability": "payable",
+    "type": "receive"
+  }
 ];
