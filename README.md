@@ -65,7 +65,7 @@ command:
 npm run dev
 ```
 ## Deployed contract addresses on the Alfajores Celo Network
-*  Contract Repo: https://github.com/gabrieltemtsen/digi-afrika-contract
+*  Contract Repo: https://github.com/gabrieltemtsen/digi-afrika-contracts
 
 ```bash
 
