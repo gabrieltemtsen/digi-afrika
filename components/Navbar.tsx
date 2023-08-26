@@ -1,9 +1,36 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton, useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
+import { useEffect, useState } from 'react';
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-
+import { SSX, SSXClientSession } from '@spruceid/ssx';
+import { providers } from "ethers";
+import { themeChange } from 'theme-change'
 const Navbar = () => {
+  const [ssxProvider, setSSX] = useState<SSX | null>(null);
+
+  const ssxHandler = async () => {
+    const ssx = new SSX({
+      providers: {
+        server: {
+          host: "http://localhost:3000/api"
+        }
+      },
+    });
+    await ssx.signIn();
+    setSSX(ssx);
+  };
+
+  const ssxLogoutHandler = async () => {
+    ssxProvider?.signOut();
+    setSSX(null);
+  };
+
+
+  useEffect(() => {
+    themeChange(false)
+  }, [])
+  
   return (
     <>
       <Head>
@@ -49,8 +76,8 @@ const Navbar = () => {
                   <span className="badge">ENS</span>
                 </Link>
               </li>
-              {/* <li><a>Settings</a></li>
-        <li><a>Logout</a></li> */}
+              <li onClick={ssxHandler}><a>Sign in with ETH</a></li>
+        <li><a>Logout</a></li>
             </ul>
           </div>
           <ConnectButton

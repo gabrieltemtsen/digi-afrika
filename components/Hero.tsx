@@ -10,8 +10,8 @@ import {
   putJSONandGetHash,
 } from "../utils/ipfsGateway";
 import { useAccount } from "wagmi";
-import { ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS } from "../utils/contracts";
-import { writeContract } from "@wagmi/core";
+import { ARBITRUM_CONTRACT_ADDRESS, AURORA_CONTRACT_ADDRESS, AVALANCHE_CONTRACT_ADDRESS, ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS, GOERLI_CONTRACT_ADDRESS } from "../utils/contracts";
+import { getNetwork, watchNetwork, writeContract } from "@wagmi/core";
 import { parseEther } from "viem";
 
 type Product = {
@@ -31,9 +31,12 @@ const Hero = () => {
   const [category, setCategory] = useState("");
   const [productImage, setProductImage] = useState<File | null>(null);
   const [digitalProduct, setDigitalProduct] = useState<File | null>(null);
-
+  
   const [coverImageUrl, setCoverImageUrl] = useState("");
   const [inTxn, setInTxn] = useState(false);
+  const { chain, chains } = getNetwork()
+  
+  
   function closeModal() {
     setIsOpen(false);
   }
@@ -74,21 +77,89 @@ const Hero = () => {
 
         const parsedPrice = parseEther(price);
 
-        const { hash } = await writeContract({
-          address: ECOMMERCE_CONTRACT_ADDRESS,
-          abi: ECOMMERCE_ABI,
-          functionName: "createProduct",
-          args: [productCID, parsedPrice],
-        });
+        console.log('hereeer')
 
-        if (hash) {
-          toast.success("Successfully created Product");
 
-          setInTxn(false);
-          closeModal();
-        } else {
-          setInTxn(false);
-        }
+    
+          if(chain?.id == 43113) {
+            const { hash } = await writeContract({
+              address: AVALANCHE_CONTRACT_ADDRESS,
+              abi: ECOMMERCE_ABI,
+              functionName: "createProduct",
+              args: [productCID, parsedPrice],
+            });
+    
+            if (hash) {
+              toast.success("Successfully created Product on Avalanche");
+    
+              setInTxn(false);
+              closeModal();
+            } else {
+              setInTxn(false);
+            }
+          }
+          else if (chain?.id == 421613) {
+            const { hash } = await writeContract({
+              address: ARBITRUM_CONTRACT_ADDRESS,
+              abi: ECOMMERCE_ABI,
+              functionName: "createProduct",
+              args: [productCID, parsedPrice],
+            });
+    
+            if (hash) {
+              toast.success("Successfully created Product on Arbitrun");
+    
+              setInTxn(false);
+              closeModal();
+            } else {
+              setInTxn(false);
+            }
+          
+    
+          }
+          else if (chain?.id == 5) {
+            console.log("here")
+            const { hash } = await writeContract({
+              address: GOERLI_CONTRACT_ADDRESS,
+              abi: ECOMMERCE_ABI,
+              functionName: "createProduct",
+              args: [productCID, parsedPrice],
+            });
+    
+            if (hash) {
+              toast.success("Successfully created Product on GoerliETH");
+    
+              setInTxn(false);
+              closeModal();
+            } else {
+              setInTxn(false);
+            }
+
+          }
+          
+          else if (chain?.id == 1313161555) {
+            const { hash } = await writeContract({
+              address: AURORA_CONTRACT_ADDRESS,
+              abi: ECOMMERCE_ABI,
+              functionName: "createProduct",
+              args: [productCID, parsedPrice],
+            });
+    
+            if (hash) {
+              toast.success("Successfully created Product on Aurora");
+    
+              setInTxn(false);
+              closeModal();
+            } else {
+              setInTxn(false);
+            }
+           
+    
+          }
+     
+     
+
+     
       } else {
         toast.error("Please complete the form and try again");
         setInTxn(false);
