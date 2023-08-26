@@ -3,8 +3,8 @@ import styles from "../styles/Home.module.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { readContract } from "@wagmi/core";
-import { ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS } from "../utils/contracts";
+import { getNetwork, readContract, watchNetwork } from "@wagmi/core";
+import { ARBITRUM_CONTRACT_ADDRESS, AURORA_CONTRACT_ADDRESS, AVALANCHE_CONTRACT_ADDRESS, ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS, GOERLI_CONTRACT_ADDRESS } from "../utils/contracts";
 import { shortenAddress } from "../utils/shortenAddress";
 import { shortenString } from "../utils/shortenString";
 type Product = {
@@ -21,52 +21,192 @@ type Product = {
 
 const Products = () => {
   const [allProducts, setAllProducts] = useState<any[]>([]);
+  const { chain, chains } = getNetwork()
 
   const getAllPro = async () => {
     try {
-      const products: any = await readContract({
-        address: ECOMMERCE_CONTRACT_ADDRESS,
-        abi: ECOMMERCE_ABI,
-        functionName: "getAllProducts",
-      });
 
-      // console.log(products)
+      //getProducts Based on Connected Chain
+        //Avalanche
+        if(chain?.id == 43113) {
+          const products: any = await readContract({
+            address: AVALANCHE_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getAllProducts",
+          });
+          
+          let newProduct = [];
 
-      let newProduct = [];
-
-      for (let i = 0; i < products.length; i++) {
-        const productCID = products[i].cid;
-        const productId = products[i].id;
-        const productStats = products[i].sold;
-        const productOwner = products[i].seller;
-
-        if (productCID) {
-          let config: any = {
-            method: "get",
-            url: `https://${productCID}.ipfs.w3s.link/file.json`,
-            headers: {},
-          };
-          const axiosResponse = await axios(config);
-
-          const productDataObj: Product = axiosResponse.data;
-
-          const ProductObj = {
-            productId: Number(productId),
-            owner: productOwner,
-            productPrice: productDataObj.productPrice,
-            productName: productDataObj.productName,
-            productDescription: productDataObj.productDescription,
-            productImage: productDataObj.productImage,
-            sold: productStats,
-          };
-
-          newProduct.push(ProductObj);
+          for (let i = 0; i < products.length; i++) {
+            const productCID = products[i].cid;
+            const productId = products[i].id;
+            const productStats = products[i].sold;
+            const productOwner = products[i].seller;
+    
+            if (productCID) {
+              let config: any = {
+                method: "get",
+                url: `https://${productCID}.ipfs.w3s.link/file.json`,
+                headers: {},
+              };
+              const axiosResponse = await axios(config);
+    
+              const productDataObj: Product = axiosResponse.data;
+    
+              const ProductObj = {
+                productId: Number(productId),
+                owner: productOwner,
+                productPrice: productDataObj.productPrice,
+                productName: productDataObj.productName,
+                productDescription: productDataObj.productDescription,
+                productImage: productDataObj.productImage,
+                sold: productStats,
+              };
+    
+              newProduct.push(ProductObj);
+            }
+          }
+    
+          setAllProducts(newProduct);
+          
         }
-      }
+        else if (chain?.id == 421613) {
+          // ARBITRUM
+          const products: any = await readContract({
+            address: ARBITRUM_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getAllProducts",
+          });
 
-      setAllProducts(newProduct);
+          let newProduct = [];
+
+          for (let i = 0; i < products.length; i++) {
+            const productCID = products[i].cid;
+            const productId = products[i].id;
+            const productStats = products[i].sold;
+            const productOwner = products[i].seller;
+    
+            if (productCID) {
+              let config: any = {
+                method: "get",
+                url: `https://${productCID}.ipfs.w3s.link/file.json`,
+                headers: {},
+              };
+              const axiosResponse = await axios(config);
+    
+              const productDataObj: Product = axiosResponse.data;
+    
+              const ProductObj = {
+                productId: Number(productId),
+                owner: productOwner,
+                productPrice: productDataObj.productPrice,
+                productName: productDataObj.productName,
+                productDescription: productDataObj.productDescription,
+                productImage: productDataObj.productImage,
+                sold: productStats,
+              };
+    
+              newProduct.push(ProductObj);
+            }
+          }
+    
+          setAllProducts(newProduct);
+          
+  
+        }
+        else if (chain?.id == 5) {
+          //Goerli
+          const products: any = await readContract({
+            address: GOERLI_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getAllProducts",
+          });
+
+          let newProduct = [];
+
+          for (let i = 0; i < products.length; i++) {
+            const productCID = products[i].cid;
+            const productId = products[i].id;
+            const productStats = products[i].sold;
+            const productOwner = products[i].seller;
+    
+            if (productCID) {
+              let config: any = {
+                method: "get",
+                url: `https://${productCID}.ipfs.w3s.link/file.json`,
+                headers: {},
+              };
+              const axiosResponse = await axios(config);
+    
+              const productDataObj: Product = axiosResponse.data;
+    
+              const ProductObj = {
+                productId: Number(productId),
+                owner: productOwner,
+                productPrice: productDataObj.productPrice,
+                productName: productDataObj.productName,
+                productDescription: productDataObj.productDescription,
+                productImage: productDataObj.productImage,
+                sold: productStats,
+              };
+    
+              newProduct.push(ProductObj);
+            }
+          }
+    
+          setAllProducts(newProduct);
+          
+        }
+        else if (chain?.id == 1313161555) {
+          //AURORA
+          const products: any = await readContract({
+            address: AURORA_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getAllProducts",
+          });
+
+          let newProduct = [];
+
+          for (let i = 0; i < products.length; i++) {
+            const productCID = products[i].cid;
+            const productId = products[i].id;
+            const productStats = products[i].sold;
+            const productOwner = products[i].seller;
+    
+            if (productCID) {
+              let config: any = {
+                method: "get",
+                url: `https://${productCID}.ipfs.w3s.link/file.json`,
+                headers: {},
+              };
+              const axiosResponse = await axios(config);
+    
+              const productDataObj: Product = axiosResponse.data;
+    
+              const ProductObj = {
+                productId: Number(productId),
+                owner: productOwner,
+                productPrice: productDataObj.productPrice,
+                productName: productDataObj.productName,
+                productDescription: productDataObj.productDescription,
+                productImage: productDataObj.productImage,
+                sold: productStats,
+              };
+    
+              newProduct.push(ProductObj);
+            }
+          }
+    
+          setAllProducts(newProduct);
+        
+  
+        }
+  
+     
+
+     
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
   getAllPro();

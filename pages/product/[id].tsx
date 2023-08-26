@@ -5,10 +5,14 @@ import { Footer, Navbar } from "../../components";
 import { useRouter } from "next/router";
 import { parseEther, parseGwei } from "viem";
 import toast, { Toaster } from "react-hot-toast";
-import { readContract, writeContract } from "@wagmi/core";
+import { getNetwork, readContract, watchNetwork, writeContract } from "@wagmi/core";
 import {
+  ARBITRUM_CONTRACT_ADDRESS,
+  AURORA_CONTRACT_ADDRESS,
+  AVALANCHE_CONTRACT_ADDRESS,
   ECOMMERCE_ABI,
   ECOMMERCE_CONTRACT_ADDRESS,
+  GOERLI_CONTRACT_ADDRESS,
 } from "../../utils/contracts";
 import axios from "axios";
 import { useAccount } from "wagmi";
@@ -33,6 +37,8 @@ export default function ProductView() {
   const [inTxn, setInTxn] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const { address } = useAccount();
+  const { chain, chains } = getNetwork()
+
 
   const id = router.query.id;
 
@@ -41,16 +47,67 @@ export default function ProductView() {
       const price = product.productPrice as `${number}`;
       setInTxn(true);
 
-      const { hash } = await writeContract({
-        address: ECOMMERCE_CONTRACT_ADDRESS,
-        abi: ECOMMERCE_ABI,
-        functionName: "buyProduct",
-        args: [id],
-        value: parseEther(price),
-      });
+    
+    
+        if(chain?.id == 43113) {
+          const { hash } = await writeContract({
+            address: AVALANCHE_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "buyProduct",
+            args: [id],
+            value: parseEther(price),
+          });
+    
+          toast.success("Purchase Successfull on Avalanche");
+          setInTxn(false);
+          getProductData()
+         
+        }
+        else if (chain?.id == 421613) {
+          const { hash } = await writeContract({
+            address: ARBITRUM_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "buyProduct",
+            args: [id],
+            value: parseEther(price),
+          });
+    
+          toast.success("Purchase Successfull");
+          setInTxn(false);
+          getProductData()
+        }
+        else if (chain?.id == 5) {
+          const { hash } = await writeContract({
+            address: GOERLI_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "buyProduct",
+            args: [id],
+            value: parseEther(price),
+          });
+    
+          toast.success("Purchase Successfull");
+          setInTxn(false);
+          getProductData()
+          
+        }
+        else if (chain?.id == 1313161555) {
+          const { hash } = await writeContract({
+            address: AURORA_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "buyProduct",
+            args: [id],
+            value: parseEther(price),
+          });
+    
+          toast.success("Purchase Successfull");
+          setInTxn(false);
+          getProductData()
+         
+  
+        }
+    
 
-      toast.success("Purchase Successfull");
-      setInTxn(false);
+     
     } catch (error) {
       console.log(error);
       setInTxn(false);
@@ -59,38 +116,165 @@ export default function ProductView() {
 
   const getProductData = async () => {
     try {
-      const product: any = await readContract({
-        address: ECOMMERCE_CONTRACT_ADDRESS,
-        abi: ECOMMERCE_ABI,
-        functionName: "getProductsById",
-        args: [currentId],
-      });
 
-      console.log("here", product.sold, product.seller);
 
-      if (product) {
-        let config: any = {
-          method: "get",
-          url: `https://${product.cid}.ipfs.w3s.link/file.json`,
-          headers: {},
-        };
-        const axiosResponse = await axios(config);
+     
+    
+        if(chain?.id == 43113) {
+          const product: any = await readContract({
+            address: AVALANCHE_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getProductsById",
+            args: [currentId],
+          });
+    
+          
+    
+        
+    
+          if (product) {
+            let config: any = {
+              method: "get",
+              url: `https://${product.cid}.ipfs.w3s.link/file.json`,
+              headers: {},
+            };
+            const axiosResponse = await axios(config);
+    
+            const productDataObj: Product = axiosResponse.data;
+    
+            const ProductObj = {
+              productId: Number(product.id),
+              owner: product.seller,
+              productPrice: productDataObj.productPrice,
+              productName: productDataObj.productName,
+              productDescription: productDataObj.productDescription,
+              productImage: productDataObj.productImage,
+              productFile: productDataObj.productFile,
+              sold: product.sold,
+            };
+    
+            setProduct(ProductObj);
+          }
+          
+        }
+        else if (chain?.id == 421613) {
+          const product: any = await readContract({
+            address: ARBITRUM_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getProductsById",
+            args: [currentId],
+          });
+    
+          
+    
+        
+    
+          if (product) {
+            let config: any = {
+              method: "get",
+              url: `https://${product.cid}.ipfs.w3s.link/file.json`,
+              headers: {},
+            };
+            const axiosResponse = await axios(config);
+    
+            const productDataObj: Product = axiosResponse.data;
+    
+            const ProductObj = {
+              productId: Number(product.id),
+              owner: product.seller,
+              productPrice: productDataObj.productPrice,
+              productName: productDataObj.productName,
+              productDescription: productDataObj.productDescription,
+              productImage: productDataObj.productImage,
+              productFile: productDataObj.productFile,
+              sold: product.sold,
+            };
+    
+            setProduct(ProductObj);
+          }
+          
+        }
+        else if (chain?.id == 5) {
 
-        const productDataObj: Product = axiosResponse.data;
+          const product: any = await readContract({
+            address: GOERLI_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getProductsById",
+            args: [currentId],
+          });
+    
+          
+    
+        
+    
+          if (product) {
+            let config: any = {
+              method: "get",
+              url: `https://${product.cid}.ipfs.w3s.link/file.json`,
+              headers: {},
+            };
+            const axiosResponse = await axios(config);
+    
+            const productDataObj: Product = axiosResponse.data;
+    
+            const ProductObj = {
+              productId: Number(product.id),
+              owner: product.seller,
+              productPrice: productDataObj.productPrice,
+              productName: productDataObj.productName,
+              productDescription: productDataObj.productDescription,
+              productImage: productDataObj.productImage,
+              productFile: productDataObj.productFile,
+              sold: product.sold,
+            };
+    
+            setProduct(ProductObj);
+          }
+          
+        }
+        else if (chain?.id == 1313161555) {
 
-        const ProductObj = {
-          productId: Number(product.id),
-          owner: product.seller,
-          productPrice: productDataObj.productPrice,
-          productName: productDataObj.productName,
-          productDescription: productDataObj.productDescription,
-          productImage: productDataObj.productImage,
-          productFile: productDataObj.productFile,
-          sold: product.sold,
-        };
+          const product: any = await readContract({
+            address: AURORA_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getProductsById",
+            args: [currentId],
+          });
+    
+          
+    
+        
+    
+          if (product) {
+            let config: any = {
+              method: "get",
+              url: `https://${product.cid}.ipfs.w3s.link/file.json`,
+              headers: {},
+            };
+            const axiosResponse = await axios(config);
+    
+            const productDataObj: Product = axiosResponse.data;
+    
+            const ProductObj = {
+              productId: Number(product.id),
+              owner: product.seller,
+              productPrice: productDataObj.productPrice,
+              productName: productDataObj.productName,
+              productDescription: productDataObj.productDescription,
+              productImage: productDataObj.productImage,
+              productFile: productDataObj.productFile,
+              sold: product.sold,
+            };
+    
+            setProduct(ProductObj);
+          }
+          
+  
+        }
+    
 
-        setProduct(ProductObj);
-      }
+
+     
     } catch (error) {
       console.log(error);
     }

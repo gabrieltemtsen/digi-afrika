@@ -17,8 +17,8 @@ import { useFetch } from "../hooks/useFetch";
 import Link from "next/link";
 import { ethers, providers } from "ethers";
 import { getDefaultProvider } from "ethers";
-import { fetchEnsAvatar, readContract, writeContract } from "@wagmi/core";
-import { ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS } from "../utils/contracts";
+import { fetchEnsAvatar, getNetwork, readContract, watchNetwork, writeContract } from "@wagmi/core";
+import { ARBITRUM_CONTRACT_ADDRESS, AURORA_CONTRACT_ADDRESS, AVALANCHE_CONTRACT_ADDRESS, ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS, GOERLI_CONTRACT_ADDRESS } from "../utils/contracts";
 import toast, { Toaster } from "react-hot-toast";
 
 type Product = {
@@ -46,6 +46,8 @@ const Profile = () => {
   const [inTxn, setInTxn] = useState(false);
 
   const [digiPoints, setDigiPoints] = useState<any>();
+  const { chain, chains } = getNetwork()
+
 
   const { data: ens } = useEnsName({
     address: address,
@@ -99,48 +101,48 @@ const Profile = () => {
     setIsOpen(true);
   }
 
-  async function createENS() {
-    try {
-      signMessage({
-        message: `Register ${name}.digi-afrikan.eth`,
-      });
+  // async function createENS() {
+  //   try {
+  //     signMessage({
+  //       message: `Register ${name}.digi-afrikan.eth`,
+  //     });
 
-      console.log(address, "here: ", data, variables);
-      const requestBody: WorkerRequest = {
-        name: `${name}.digi-afrikan.eth`,
-        owner: address!,
-        addresses: { "60": address },
-        texts: { description },
-        signature: {
-          hash: "0xbc05706d6998123eba534fabc90b1ca571e33bbce50747c71682c370101d346f25b919d8cc1bc2f6f630413c48d3bb5782ada20a6e7342709e61588ca97134671c",
-          message: "Register asa.digi-afrikan.eth",
-        },
-      };
-      console.log("reEQ: ", requestBody);
+  //     console.log(address, "here: ", data, variables);
+  //     const requestBody: WorkerRequest = {
+  //       name: `${name}.digi-afrikan.eth`,
+  //       owner: address!,
+  //       addresses: { "60": address },
+  //       texts: { description },
+  //       signature: {
+  //         hash: "0xbc05706d6998123eba534fabc90b1ca571e33bbce50747c71682c370101d346f25b919d8cc1bc2f6f630413c48d3bb5782ada20a6e7342709e61588ca97134671c",
+  //         message: "Register asa.digi-afrikan.eth",
+  //       },
+  //     };
+  //     console.log("reEQ: ", requestBody);
 
-      // const {
-      //   data: gatewayData,
-      //   error: gatewayError,
-      //   isLoading: gatewayIsLoading,
-      // } = useFetch(data && 'https://ens-gateway.gabrieltemtsen.workers.dev/set', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(requestBody),
-      // })
-      if (requestBody) {
-        const res = await axios.post(
-          "https://ens-gateway.gabrieltemtsen.workers.dev/set",
-          { requestBody },
-        );
+  //     // const {
+  //     //   data: gatewayData,
+  //     //   error: gatewayError,
+  //     //   isLoading: gatewayIsLoading,
+  //     // } = useFetch(data && 'https://ens-gateway.gabrieltemtsen.workers.dev/set', {
+  //     //   method: 'POST',
+  //     //   headers: {
+  //     //     'Content-Type': 'application/json',
+  //     //   },
+  //     //   body: JSON.stringify(requestBody),
+  //     // })
+  //     if (requestBody) {
+  //       const res = await axios.post(
+  //         "https://ens-gateway.gabrieltemtsen.workers.dev/set",
+  //         { requestBody },
+  //       );
 
-        console.log(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //       console.log(res.data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   // const getEnsByResolving = async() => {
   //   const naming = await provider.lookupAddress(address);
   //   console.log(naming)
@@ -150,57 +152,229 @@ const Profile = () => {
 
   const getProductsByAddress = async () => {
     try {
-      const products: any = await readContract({
-        address: ECOMMERCE_CONTRACT_ADDRESS,
-        abi: ECOMMERCE_ABI,
-        functionName: "getProductsByOwnerAddress",
-        args: [address],
-      });
-
-      const digiPoints: any = await readContract({
-        address: ECOMMERCE_CONTRACT_ADDRESS,
-        abi: ECOMMERCE_ABI,
-        functionName: "getUserPoints",
-        args: [address],
-      });
-
-      setDigiPoints(Number(digiPoints));
-
-      // console.log(products)
-
-      let newProduct = [];
-
-      for (let i = 0; i < products.length; i++) {
-        const productCID = products[i].cid;
-        const productId = products[i].id;
-        const productStats = products[i].sold;
-        const productOwner = products[i].seller;
-
-        if (productCID) {
-          let config: any = {
-            method: "get",
-            url: `https://${productCID}.ipfs.w3s.link/file.json`,
-            headers: {},
-          };
-          const axiosResponse = await axios(config);
-
-          const productDataObj: Product = axiosResponse.data;
-
-          const ProductObj = {
-            productId: Number(productId),
-            owner: productOwner,
-            productPrice: productDataObj.productPrice,
-            productName: productDataObj.productName,
-            productDescription: productDataObj.productDescription,
-            productImage: productDataObj.productImage,
-            sold: productStats,
-          };
-
-          newProduct.push(ProductObj);
+    
+        if(chain?.id == 43113) {
+          //AVALANCHE
+          const products: any = await readContract({
+            address: AVALANCHE_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getProductsByOwnerAddress",
+            args: [address],
+          });
+    
+          const digiPoints: any = await readContract({
+            address: AVALANCHE_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getUserPoints",
+            args: [address],
+          });
+    
+          setDigiPoints(Number(digiPoints));
+    
+    
+          let newProduct = [];
+    
+          for (let i = 0; i < products.length; i++) {
+            const productCID = products[i].cid;
+            const productId = products[i].id;
+            const productStats = products[i].sold;
+            const productOwner = products[i].seller;
+    
+            if (productCID) {
+              let config: any = {
+                method: "get",
+                url: `https://${productCID}.ipfs.w3s.link/file.json`,
+                headers: {},
+              };
+              const axiosResponse = await axios(config);
+    
+              const productDataObj: Product = axiosResponse.data;
+    
+              const ProductObj = {
+                productId: Number(productId),
+                owner: productOwner,
+                productPrice: productDataObj.productPrice,
+                productName: productDataObj.productName,
+                productDescription: productDataObj.productDescription,
+                productImage: productDataObj.productImage,
+                sold: productStats,
+              };
+    
+              newProduct.push(ProductObj);
+            }
+          }
+    
+          setAllProducts(newProduct);
+          
         }
-      }
-
-      setAllProducts(newProduct);
+        else if (chain?.id == 421613) {
+          //ARBITRUM
+          const products: any = await readContract({
+            address: ARBITRUM_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getProductsByOwnerAddress",
+            args: [address],
+          });
+    
+          const digiPoints: any = await readContract({
+            address: ARBITRUM_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getUserPoints",
+            args: [address],
+          });
+    
+          setDigiPoints(Number(digiPoints));
+    
+          // console.log(products)
+    
+          let newProduct = [];
+    
+          for (let i = 0; i < products.length; i++) {
+            const productCID = products[i].cid;
+            const productId = products[i].id;
+            const productStats = products[i].sold;
+            const productOwner = products[i].seller;
+    
+            if (productCID) {
+              let config: any = {
+                method: "get",
+                url: `https://${productCID}.ipfs.w3s.link/file.json`,
+                headers: {},
+              };
+              const axiosResponse = await axios(config);
+    
+              const productDataObj: Product = axiosResponse.data;
+    
+              const ProductObj = {
+                productId: Number(productId),
+                owner: productOwner,
+                productPrice: productDataObj.productPrice,
+                productName: productDataObj.productName,
+                productDescription: productDataObj.productDescription,
+                productImage: productDataObj.productImage,
+                sold: productStats,
+              };
+    
+              newProduct.push(ProductObj);
+            }
+          }
+    
+          setAllProducts(newProduct);
+          
+  
+        }
+        else if (chain?.id == 5) {
+          //GOERLI
+          const products: any = await readContract({
+            address: GOERLI_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getProductsByOwnerAddress",
+            args: [address],
+          });
+    
+          const digiPoints: any = await readContract({
+            address: GOERLI_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getUserPoints",
+            args: [address],
+          });
+    
+          setDigiPoints(Number(digiPoints));
+    
+          // console.log(products)
+    
+          let newProduct = [];
+    
+          for (let i = 0; i < products.length; i++) {
+            const productCID = products[i].cid;
+            const productId = products[i].id;
+            const productStats = products[i].sold;
+            const productOwner = products[i].seller;
+    
+            if (productCID) {
+              let config: any = {
+                method: "get",
+                url: `https://${productCID}.ipfs.w3s.link/file.json`,
+                headers: {},
+              };
+              const axiosResponse = await axios(config);
+    
+              const productDataObj: Product = axiosResponse.data;
+    
+              const ProductObj = {
+                productId: Number(productId),
+                owner: productOwner,
+                productPrice: productDataObj.productPrice,
+                productName: productDataObj.productName,
+                productDescription: productDataObj.productDescription,
+                productImage: productDataObj.productImage,
+                sold: productStats,
+              };
+    
+              newProduct.push(ProductObj);
+            }
+          }
+    
+          setAllProducts(newProduct);
+          
+        }
+        else if (chain?.id == 1313161555) {
+          //AURORA
+          const products: any = await readContract({
+            address: AURORA_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getProductsByOwnerAddress",
+            args: [address],
+          });
+    
+          const digiPoints: any = await readContract({
+            address: AURORA_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "getUserPoints",
+            args: [address],
+          });
+    
+          setDigiPoints(Number(digiPoints));
+    
+          // console.log(products)
+    
+          let newProduct = [];
+    
+          for (let i = 0; i < products.length; i++) {
+            const productCID = products[i].cid;
+            const productId = products[i].id;
+            const productStats = products[i].sold;
+            const productOwner = products[i].seller;
+    
+            if (productCID) {
+              let config: any = {
+                method: "get",
+                url: `https://${productCID}.ipfs.w3s.link/file.json`,
+                headers: {},
+              };
+              const axiosResponse = await axios(config);
+    
+              const productDataObj: Product = axiosResponse.data;
+    
+              const ProductObj = {
+                productId: Number(productId),
+                owner: productOwner,
+                productPrice: productDataObj.productPrice,
+                productName: productDataObj.productName,
+                productDescription: productDataObj.productDescription,
+                productImage: productDataObj.productImage,
+                sold: productStats,
+              };
+    
+              newProduct.push(ProductObj);
+            }
+          }
+    
+          setAllProducts(newProduct);
+         
+  
+        }
+    
     } catch (error) {
       console.log(error);
     }
@@ -209,15 +383,60 @@ const Profile = () => {
   const deleteProduct = async (id: any) => {
     try {
       setInTxn(true);
-      const { hash } = await writeContract({
-        address: ECOMMERCE_CONTRACT_ADDRESS,
-        abi: ECOMMERCE_ABI,
-        functionName: "removeProduct",
-        args: [id],
-      });
-
-      toast.success("successfully deleted product");
-      setInTxn(false);
+    
+        if(chain?.id == 43113) {
+          const { hash } = await writeContract({
+            address: AVALANCHE_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "removeProduct",
+            args: [id],
+          });
+    
+          toast.success("successfully deleted product from Avalanche");
+          setInTxn(false);
+          
+          
+        }
+        else if (chain?.id == 421613) {
+          const { hash } = await writeContract({
+            address: ARBITRUM_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "removeProduct",
+            args: [id],
+          });
+    
+          toast.success("successfully deleted product from Arbitrum");
+          setInTxn(false);
+          
+  
+        }
+        else if (chain?.id == 5) {
+          const { hash } = await writeContract({
+            address: GOERLI_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "removeProduct",
+            args: [id],
+          });
+    
+          toast.success("successfully deleted product from GoerliETH");
+          setInTxn(false);
+         
+        }
+        else if (chain?.id == 1313161555) {
+          const { hash } = await writeContract({
+            address: AURORA_CONTRACT_ADDRESS,
+            abi: ECOMMERCE_ABI,
+            functionName: "removeProduct",
+            args: [id],
+          });
+    
+          toast.success("successfully deleted product from Aurora");
+          setInTxn(false);
+         
+  
+        }
+   
+     
     } catch (error) {
       setInTxn(false);
       console.log(error);
@@ -232,7 +451,7 @@ const Profile = () => {
         setInTxn(false);
       } else {
         const { hash } = await writeContract({
-          address: ECOMMERCE_CONTRACT_ADDRESS,
+          address: GOERLI_CONTRACT_ADDRESS,
           abi: ECOMMERCE_ABI,
           functionName: "redeemUserPoints",
           args: [address],
@@ -251,20 +470,20 @@ const Profile = () => {
     setCurrentAddr(address);
     setEnsName(ens);
     getProductsByAddress();
-  }, [address, ens]);
+  }, [address, ens, currentAddr]);
 
   return (
     <>
       <Toaster />
       <Navbar />
-      <div className=" min-h-screen">
+      <div  className=" min-h-screen">
         {/* Main Content */}
         <div className="container mx-auto py-8">
           <div className="flex">
             {/* Chat Section  */}
             <div className="w-2/3 p-4">
-              <div className="bg-blue-950 rounded-lg shadow-md p-4">
-                <h2 className="text-lg font-semibold mb-4">Profile</h2>
+              <div  className="bg-blue-950 rounded-lg shadow-md p-4">
+                <h2 className="text-lg font-semibold mb-4 text-white">Profile</h2>
                 <div className="avatar flex justify-center items-center">
                   <div className=" mb-3 items-center w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                     <img
@@ -276,7 +495,7 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className="avatar flex justify-center items-center mb-5">
-                  <h1 className="font-bold">{address ? ens : address}</h1>
+                  <h1 className="font-bold text-white">{ens || address  }</h1>
                 </div>
                 <div className="bg-gray-300 min-h-screen">
                   {/* Main Content */}
