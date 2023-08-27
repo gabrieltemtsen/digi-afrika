@@ -266,7 +266,7 @@ const Hero = () => {
                                 setPrice(e.target.value);
                               }}
                               type="text"
-                              placeholder="Enter price in celo"
+                              placeholder="Enter price in usdc"
                               className="input input-bordered w-full max-w-xs"
                             />
                           </div>

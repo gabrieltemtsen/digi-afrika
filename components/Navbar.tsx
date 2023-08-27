@@ -8,6 +8,7 @@ import { providers } from "ethers";
 import { themeChange } from 'theme-change'
 const Navbar = () => {
   const [ssxProvider, setSSX] = useState<SSX | null>(null);
+  
 
   const ssxHandler = async () => {
     const ssx = new SSX({
@@ -16,21 +17,34 @@ const Navbar = () => {
           host: "http://localhost:3000/api"
         }
       },
+      resolveEns: {
+        resolveOnServer: false, // false as default
+        resolve: {
+          domain: true,
+          avatar: true
+        }
+      }
     });
-    await ssx.signIn();
+   const res =  await ssx.signIn();
+
+   console.log(res)
+
+    localStorage.setItem('SSX', JSON.stringify(res));
     setSSX(ssx);
   };
 
   const ssxLogoutHandler = async () => {
-    ssxProvider?.signOut();
     setSSX(null);
   };
-
-
   useEffect(() => {
-    themeChange(false)
-  }, [])
-  
+    const ssx = localStorage.getItem('SSX')
+    if (ssx) {
+      const parsedSSX = JSON.parse(ssx)
+      setSSX(parsedSSX);
+    }
+  }, []);
+
+
   return (
     <>
       <Head>
@@ -70,14 +84,20 @@ const Navbar = () => {
               tabIndex={0}
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
             >
-              <li>
+              {ssxProvider ? 
+              <>
+               <li>
                 <Link href="/profile" className="justify-between">
                   Profile
                   <span className="badge">ENS</span>
                 </Link>
               </li>
-              <li onClick={ssxHandler}><a>Sign in with ETH</a></li>
-        <li><a>Logout</a></li>
+              <li onClick={ssxLogoutHandler}><a>Logout</a></li>
+              </> :
+               <li onClick={ssxHandler}><a>Sign in with ETH</a></li>
+              }
+             
+             
             </ul>
           </div>
           <ConnectButton

@@ -3,10 +3,11 @@ import styles from "../styles/Home.module.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { getNetwork, readContract, watchNetwork } from "@wagmi/core";
+import { fetchEnsAvatar, getNetwork, readContract, watchNetwork } from "@wagmi/core";
 import { ARBITRUM_CONTRACT_ADDRESS, AURORA_CONTRACT_ADDRESS, AVALANCHE_CONTRACT_ADDRESS, ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS, GOERLI_CONTRACT_ADDRESS } from "../utils/contracts";
 import { shortenAddress } from "../utils/shortenAddress";
 import { shortenString } from "../utils/shortenString";
+import { useEnsName } from "wagmi";
 type Product = {
   productId: any;
   productName: string;
@@ -17,11 +18,14 @@ type Product = {
   productDescription: string;
   productCategory: string;
   sold: boolean;
+  ensName: string;
+  avatar: string;
 };
 
 const Products = () => {
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const { chain, chains } = getNetwork()
+ 
 
   const getAllPro = async () => {
     try {
@@ -52,6 +56,8 @@ const Products = () => {
               const axiosResponse = await axios(config);
     
               const productDataObj: Product = axiosResponse.data;
+           
+              
     
               const ProductObj = {
                 productId: Number(productId),
@@ -61,6 +67,7 @@ const Products = () => {
                 productDescription: productDataObj.productDescription,
                 productImage: productDataObj.productImage,
                 sold: productStats,
+               
               };
     
               newProduct.push(ProductObj);
@@ -257,12 +264,18 @@ const Products = () => {
                      <p className="mt-1 text-sm text-gray-500">
                        {shortenString(product.productDescription)}
                      </p>
-                     <p className="mt-1 text-sm ">
-                       By: {shortenAddress(product.owner)}
-                     </p>
+                     <div className="mt-1 text-sm text-green-400">
+                     <div className="avatar">
+                      <div className="w-6 rounded-full mr-1 ">
+                        <img src={product.ensAvatar || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR5LhzwQJZ-33pHjmP1ps8zCtxcGUe7-j5EA9wGr0&s"} alt="avatar" />
+                      </div>
+                      {product.ensName || shortenAddress(product.owner)}
+                    </div>
+                       
+                     </div>
                    </div>
                    <p className="text-sm font-medium text-green-400">
-                     {product.productPrice} celo
+                     {product.productPrice} usdc
                    </p>
                  </div>
                  <button className="mt-2 btn btn-wide">purchase</button>
