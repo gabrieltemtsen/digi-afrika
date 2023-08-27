@@ -17,9 +17,10 @@ import { useFetch } from "../hooks/useFetch";
 import Link from "next/link";
 import { ethers, providers } from "ethers";
 import { getDefaultProvider } from "ethers";
-import { fetchEnsAvatar, getNetwork, readContract, watchNetwork, writeContract } from "@wagmi/core";
+import { fetchEnsAvatar, fetchEnsName, getNetwork, readContract, watchNetwork, writeContract } from "@wagmi/core";
 import { ARBITRUM_CONTRACT_ADDRESS, AURORA_CONTRACT_ADDRESS, AVALANCHE_CONTRACT_ADDRESS, ECOMMERCE_ABI, ECOMMERCE_CONTRACT_ADDRESS, GOERLI_CONTRACT_ADDRESS } from "../utils/contracts";
 import toast, { Toaster } from "react-hot-toast";
+import { SSX } from "@spruceid/ssx";
 
 type Product = {
   productId: any;
@@ -39,7 +40,7 @@ const Profile = () => {
   let [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [ensName, setEnsName] = useState<any>("");
+  const [ens, setEnsName] = useState<any>("...");
   const [currentAddr, setCurrentAddr] = useState<any>("");
   const [ensAvatar, setEnsAvatar] = useState<any>("");
   const [allProducts, setAllProducts] = useState<any[]>([]);
@@ -49,22 +50,50 @@ const Profile = () => {
   const { chain, chains } = getNetwork()
 
 
-  const { data: ens } = useEnsName({
-    address: address,
-    chainId: 5,
-  });
-  console.log("ens:", ens);
+  // const { data: ens } = useEnsName({
+  //   address: '0x7231D8CCF0bcF5678dB30730EfE18F21d520C379',
+  //   chainId: 5,
+  // });
+  // const resolveENS = async() =>{
+    
+  //   const ssx = new SSX({
+  //     resolveEns: true
+  //   });
+  //   const { ens } = await ssx.signIn();
+  //   console.log('hereYouGo', ens)
+  //   const ensData = await ssx.resolveEns("0x7231D8CCF0bcF5678dB30730EfE18F21d520C379", {
+  //     domain: false,
+  //     avatar: true,
+  // });
+  // console.log('ENSxx: ', ensData)
 
-  const getAvatar = async () => {
-    if (ensName) {
+  // }
+  
+ 
+  
+  ;
+
+  const getENS = async () => {
+    if(address) {
+      const ensName = await fetchEnsName({
+      address: address!,
+    })
+
+    setEnsName(ensName)
+
+    
       const ensAvatar = await fetchEnsAvatar({
-        name: ensName,
+        name: ensName as string,
       });
       setEnsAvatar(ensAvatar);
       console.log(ensAvatar);
-    }
+    
+  }else {
+    return
   };
-  getAvatar();
+    } 
+    
+  
 
   const regex = new RegExp("^[a-z0-9-]+$");
   const debouncedName = useDebounce(name, 500);
@@ -468,9 +497,9 @@ const Profile = () => {
 
   useEffect(() => {
     setCurrentAddr(address);
-    setEnsName(ens);
+    getENS();
     getProductsByAddress();
-  }, [address, ens, currentAddr]);
+  }, [address, currentAddr]);
 
   return (
     <>
@@ -510,7 +539,7 @@ const Profile = () => {
                           <button onClick={redeemPoints} className="btn btn-sm">
                             redeem points
                           </button>
-                          <p className="text-black mt-1 text-sm italic">
+                          <p  className="text-black mt-1 text-sm italic">
                             get points by making purchases on digi-afrika
                           </p>
                         </div>
@@ -629,13 +658,13 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Transaction History */}
+            
             <div className="w-1/3 p-4">
               <div className="bg-white rounded-lg shadow-md p-4">
                 <h2 className="text-lg font-semibold text-black mb-4">
-                  Transaction History
+                  Your Orbit
                 </h2>
-                {/* Transaction history content */}
+               
               </div>
             </div>
           </div>

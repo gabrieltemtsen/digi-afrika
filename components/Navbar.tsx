@@ -8,6 +8,7 @@ import { providers } from "ethers";
 import { themeChange } from 'theme-change'
 const Navbar = () => {
   const [ssxProvider, setSSX] = useState<SSX | null>(null);
+  
 
   const ssxHandler = async () => {
     const ssx = new SSX({
@@ -16,18 +17,32 @@ const Navbar = () => {
           host: "http://localhost:3000/api"
         }
       },
+      resolveEns: {
+        resolveOnServer: false, // false as default
+        resolve: {
+          domain: true,
+          avatar: true
+        }
+      }
     });
-    await ssx.signIn();
+   const res =  await ssx.signIn();
 
-    console.log('SSXX:  ',ssx?.session.name)
+   console.log(res)
+
+    localStorage.setItem('SSX', JSON.stringify(res));
     setSSX(ssx);
   };
 
   const ssxLogoutHandler = async () => {
-    ssxProvider?.signOut();
     setSSX(null);
   };
-
+  useEffect(() => {
+    const ssx = localStorage.getItem('SSX')
+    if (ssx) {
+      const parsedSSX = JSON.parse(ssx)
+      setSSX(parsedSSX);
+    }
+  }, []);
 
 
   return (
