@@ -1,11 +1,10 @@
 ## Digi-Afrika
 
-Digi-Afrika is a decentralized e-commerce platform built on the principles of an escrow framework. It enables users to buy and sell digital products on the platform. Sellers can create product ads on the platform, and anyone can make a purchase. The platform rewards users with Digi-Points for their activities, which can be redeemed for celo once a certain threshold is met, offering tangible incentives for our vibrant community. Digi-Afrika also leverages ENS (Ethereum Name Service) for name and address resolution and allows users to register off-chain ENS names with the subdomain `example.digi-afrika.eth`. We've strategically deployed our platform on the Celo Alfajores network, leveraging the capabilities of Bunzz, a cutting-edge smart contract platform.  
+Digi-Afrika is a decentralized e-commerce platform built on the principles of an escrow framework. It enables users to buy and sell digital products on the platform. Sellers can create product ads on the platform, and anyone can make a purchase. The platform rewards users with Digi-Points for their activities, which can be redeemed for tokens once a certain threshold is met, offering tangible incentives for our vibrant community. Digi-Afrika also leverages ENS (Ethereum Name Service) for name and address resolution and allows users to register off-chain ENS names with the subdomain `example.digi-afrika.eth`. We've strategically deployed our platform on 4 blockchain networks(Avalanche Fuji, Arbitrum Goerli, Goerli and Aurora Testnet ).  
 
 ### Live Demo
 https://digi-afrika.vercel.app/
-### Video Demo
-https://www.loom.com/share/9dc55d26e47240dc825b81f33d090f16
+
 
 ### Pitch Deck
 https://pitch.com/public/cd3b97f2-a853-44b3-9abf-918d6f77ca4a
@@ -17,8 +16,7 @@ Digi-Afrika was conceived to revolutionize e-commerce by combining decentralizat
 ## Technology Stacks
 * NextJS
 * Node.js & Typescript
-* Celo-composer
-* Bunzz
+* SpruceID
 * Wagmi & Rainbowkit
 * Solidity & Hardhat
 * IPFS & Web3 storage
@@ -29,7 +27,7 @@ Digi-Afrika was conceived to revolutionize e-commerce by combining decentralizat
 
 ## Features
 * Decentralized E-commerce: Buy and sell digital products with confidence through an escrow framework.
-* Digi-Points Rewards: Earn rewards for your activities on the platform, which can be redeemed for celo.
+* Digi-Points Rewards: Earn rewards for your activities on the platform, which can be redeemed for tokens.
 * ENS Integration: Seamlessly resolve names and addresses using Ethereum Name Service.
 * Off-chain ENS Registration: Register off-chain ENS names with the subdomain `example.digi-afrika.eth`.
 
@@ -38,7 +36,6 @@ Digi-Afrika was conceived to revolutionize e-commerce by combining decentralizat
 * Fetching Products from the smart contract, looping through to retrieve the data from IPFS and displaying in the UI.
 * Dependency conflicts between ethers, viem, wagmi and rainbowkit due to the packages migrations.
 * Offchain-Ens registration, deploying worker on cloudfare.
-* Deploying e-commerce contract on Bunzz.
 
 ## Future  Plans
 * Implement a fully functional Dispute Management within an escrow framework.
@@ -65,13 +62,14 @@ command:
 ```bash
 npm run dev
 ```
-## Deployed contract addresses on the Alfajores Celo Network
+## Deployed contract addresses on the blockchain Networks
 *  Contract Repo: https://github.com/degencodebeast/digi-afrika-contracts
 
 ```bash
 
-E-commerce Contract Address deployed with Bunzz: 
-'0xBd8E57afA96b52c187C367a4a082e584732d6575'
+GOERLI: '0x1deaE4b5B3dcA8d47E42C894C2D057661490343A'
+AVALANCHE: '0xDa54728ab7f537b6a00FfBcA01441c20Bc441336'
+ARBITRUM-GOERLI: '0x64A9E8425f8a219B5D0a843c531CFa2D2fA891D8'
 
 ```
 ## ENS Resolution & Cloudfare D1

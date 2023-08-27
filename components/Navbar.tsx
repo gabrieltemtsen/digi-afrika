@@ -83,8 +83,9 @@ const Navbar = () => {
             <ul
               tabIndex={0}
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-            >
-              {ssxProvider ? 
+            > 
+            {/* spruceID */}
+              {/* {ssxProvider ? 
               <>
                <li>
                 <Link href="/profile" className="justify-between">
@@ -95,7 +96,18 @@ const Navbar = () => {
               <li onClick={ssxLogoutHandler}><a>Logout</a></li>
               </> :
                <li onClick={ssxHandler}><a>Sign in with ETH</a></li>
-              }
+              } */}
+              
+               <li>
+                <Link href="/profile" className="justify-between">
+                  Profile
+                  <span className="badge">ENS</span>
+                </Link>
+              </li>
+              <li onClick={ssxLogoutHandler}><a>Logout</a></li>
+             
+               <li onClick={ssxHandler}><a>Sign in with ETH</a></li>
+             
              
              
             </ul>
