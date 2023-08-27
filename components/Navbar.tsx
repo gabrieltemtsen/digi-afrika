@@ -18,6 +18,8 @@ const Navbar = () => {
       },
     });
     await ssx.signIn();
+
+    console.log('SSXX:  ',ssx?.session.name)
     setSSX(ssx);
   };
 
@@ -27,10 +29,7 @@ const Navbar = () => {
   };
 
 
-  useEffect(() => {
-    themeChange(false)
-  }, [])
-  
+
   return (
     <>
       <Head>
@@ -70,14 +69,20 @@ const Navbar = () => {
               tabIndex={0}
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
             >
-              <li>
+              {ssxProvider ? 
+              <>
+               <li>
                 <Link href="/profile" className="justify-between">
                   Profile
                   <span className="badge">ENS</span>
                 </Link>
               </li>
-              <li onClick={ssxHandler}><a>Sign in with ETH</a></li>
-        <li><a>Logout</a></li>
+              <li onClick={ssxLogoutHandler}><a>Logout</a></li>
+              </> :
+               <li onClick={ssxHandler}><a>Sign in with ETH</a></li>
+              }
+             
+             
             </ul>
           </div>
           <ConnectButton

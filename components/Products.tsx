@@ -262,7 +262,7 @@ const Products = () => {
                      </p>
                    </div>
                    <p className="text-sm font-medium text-green-400">
-                     {product.productPrice} celo
+                     {product.productPrice} usdc
                    </p>
                  </div>
                  <button className="mt-2 btn btn-wide">purchase</button>
