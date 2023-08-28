@@ -6,6 +6,8 @@ Digi-Afrika is a decentralized e-commerce platform built on the principles of an
 https://digi-afrika.vercel.app/
 
 
+
+
 ### Pitch Deck
 https://pitch.com/public/cd3b97f2-a853-44b3-9abf-918d6f77ca4a
 
@@ -69,7 +71,7 @@ npm run dev
 
 GOERLI: '0x1deaE4b5B3dcA8d47E42C894C2D057661490343A'
 AVALANCHE: '0xDa54728ab7f537b6a00FfBcA01441c20Bc441336'
-ARBITRUM-GOERLI: '0x64A9E8425f8a219B5D0a843c531CFa2D2fA891D8'
+ARBITRUM-GOERLI: '0xfc8Ed811Cf99F68cda81D99142def5E85c264fA3'
 
 ```
 ## ENS Resolution & Cloudfare D1
