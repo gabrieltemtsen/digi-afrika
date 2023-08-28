@@ -77,6 +77,7 @@ const Profile = () => {
     if(address) {
       const ensName = await fetchEnsName({
       address: address!,
+      chainId: 5
     })
 
     setEnsName(ensName)
